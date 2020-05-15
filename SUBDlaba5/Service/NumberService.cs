@@ -53,6 +53,22 @@ namespace Lab5.Service
             return answer;
         }
 
+        public static (string, int) ReadUsedNumber()
+        {
+            var answer =
+                db.Orders
+                .Include(rec => rec.Number)
+                .GroupBy(rec => rec.Number.TypeOfNumber)
+                .Select(m => new
+                {
+                    name = m.Key,
+                    Count = m.Count()
+                })
+                .First();
+
+            return (answer.name, answer.Count);
+        }
+
         public static void Update(Number model)
         {
             Number number = db.Numbers.FirstOrDefault(rec => rec.Size == model.Size && rec.TypeOfNumber == model.TypeOfNumber);

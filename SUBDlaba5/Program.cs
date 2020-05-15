@@ -59,27 +59,24 @@ namespace Lab5
 
         static int[] test()
         {
-            int[] times = new int[17];
+            int[] times = new int[15];
 
 
             times[0] = ScriptInsert0();
             times[1] = ScriptInsert1();
             times[2] = ScriptInsert2();
-            times[3] = ScriptInsert3();
-            times[4] = ScriptInsert4();
-            times[5] = ScriptInsert5();
-            times[6] = ScriptRead0();
-            times[7] = ScriptRead1();
-            times[8] = ScriptRead2();
-            times[9] = ScriptUpdate0();
-            times[10] = ScriptUpdate1();
-            times[11] = ScriptUpdate2();
-            //times[12] = ScriptCustom0();
-            times[13] = ScriptCustom1();
-            times[14] = ScriptCustom2();
-           // times[15] = ScriptDelete2();
-            //times[16] = ScriptDelete1();
-            //times[17] = ScriptDelete0();
+            times[3] = ScriptRead0();
+            times[4] = ScriptRead1();
+            times[5] = ScriptRead2();
+            times[6] = ScriptUpdate0();
+            times[7] = ScriptUpdate1();
+            times[8] = ScriptUpdate2();
+            times[9] = ScriptCustom0();
+            times[10] = ScriptCustom1();
+            times[11] = ScriptCustom2();
+            times[12] = ScriptDelete0();
+            times[13] = ScriptDelete1();
+            times[14] = ScriptDelete2();
 
             return times;
         }
@@ -95,7 +92,7 @@ namespace Lab5
             return (int)(finishTime - startTime).TotalMilliseconds;
         }
 
-        static int ScriptInsert1()
+        static int ScriptInsert4()
         {
             Customer model = new Customer() { FullNameCustomers = "Ivanov II", NumberOfMan = 1 };
 
@@ -128,7 +125,7 @@ namespace Lab5
             return (int)(finishTime - startTime).TotalMilliseconds;
         }
 
-        static int ScriptInsert4()
+        static int ScriptInsert1()
         {
             Worker model = new Worker() { FullNameWorker = "Ivanov II", Position = "manager" };
 
@@ -169,7 +166,7 @@ namespace Lab5
             return (int)(finishTime - startTime).TotalMilliseconds;
         }
 
-        static int ScriptRead0()
+        static int ScriptRead5()
         {
             Customer model = CustomerService.Read(new Customer() { FullNameCustomers = "Ivanov II", NumberOfMan = 1 }, 1, 0).First();
 
@@ -184,7 +181,7 @@ namespace Lab5
 
         static int ScriptRead1()
         {
-            Money model = MoneyService.Read(new Money() { Currency = "RUB", Amount = 1000 }, 1, 0).First();
+            Money model = MoneyService.Read(new Money() { Currency = "RUB", Amount = 1000, WorkerMoney = 1 }, 1, 0).First();
 
             DateTime startTime = DateTime.Now;
             Money models = MoneyService.Read(model, 1, 0).First();
@@ -239,7 +236,7 @@ namespace Lab5
             return (int)(finishTime - startTime).TotalMilliseconds;
         }
 
-        static int ScriptRead5()
+        static int ScriptRead0()
         {
             Worker model = WorkerService.Read(new Worker() { FullNameWorker = "Ivanov II", Position = "manager" }, 1, 0).First();
 
@@ -263,16 +260,16 @@ namespace Lab5
 
         static int ScriptUpdate1()
         {
-            Customer model = CustomerService.Read(new Customer() { FullNameCustomers = "Ivanov II", NumberOfMan = 1 }, 1, 0).First();
+            Number model = NumberService.Read(new Number() { Size = 2, TypeOfNumber = "Standart" }, 1, 0).First();
             DateTime startTime = DateTime.Now;
-            CustomerService.Update(model);
+            NumberService.Update(model);
             DateTime finishTime = DateTime.Now;
             return (int)(finishTime - startTime).TotalMilliseconds;
         }
 
         static int ScriptUpdate2()
         {
-            Money model = MoneyService.Read(new Money() { Currency = "RUB", Amount = 1000 }, 1, 0).First();
+            Money model = MoneyService.Read(new Money() { Currency = "RUB", Amount = 1000, WorkerMoney = 1 }, 1, 0).First();
             DateTime startTime = DateTime.Now;
             MoneyService.Update(model);
             DateTime finishTime = DateTime.Now;
@@ -281,47 +278,75 @@ namespace Lab5
 
         static int ScriptDelete0()
         {
-            Transport transport = TransportService.Read(new Transport() { NumborOfTransport = "A336KK", TypeOfTransport = "standart" }, 1, 0).First();
-            Transport model = new Transport() { Id = transport.Id };
+            Number model = new Number() { Size = 2, TypeOfNumber = "Standart" };
+
             DateTime startTime = DateTime.Now;
-            TransportService.Delete(model);
+            NumberService.Delete(model);
             DateTime finishTime = DateTime.Now;
+
             return (int)(finishTime - startTime).TotalMilliseconds;
         }
 
         static int ScriptDelete1()
         {
-            Orders order = OrdersService.Read(new Orders() { DataEnd = DateTime.Now.Date }, 1, 0).First();
-            Customer customer = CustomerService.Read(new Customer() { Id = order.Id }, 1, 0).First();
-            Customer model = new Customer() { Id = customer.Id };
+            var worker = WorkerService.Read(new Worker() { FullNameWorker = "Ivanov II", Position = "manager" }, 1, 0).First();
+
+            // Предполагается, что действия до создания модели - это моделирование выбора пользователя
+
+            var models = OrdersService.Read(new Orders() { WorkerId = worker.Id });
+
             DateTime startTime = DateTime.Now;
-            CustomerService.Delete(model);
+            foreach (var model in models)
+            {
+                OrdersService.Delete(model);
+            }
             DateTime finishTime = DateTime.Now;
 
             return (int)(finishTime - startTime).TotalMilliseconds;
+
+
+          /*  Worker model = new Worker() { FullNameWorker = "Ivanov II", Position = "manager" };
+
+            DateTime startTime = DateTime.Now;
+            WorkerService.Delete(model);
+            DateTime finishTime = DateTime.Now;
+
+            return (int)(finishTime - startTime).TotalMilliseconds;*/
         }
 
         static int ScriptDelete2()
         {
-            Worker order = WorkerService.Read(new Worker() { FullNameWorker = "Ivanov II", Position = "manager" }, 1, 0).First();
-            Worker model = new Worker() { Id = order.Id };
+
+            var money = MoneyService.Read(new Money() { Currency = "RUB", Amount = 1000, WorkerMoney = 1 }, 1, 0).First();
+
+            // Предполагается, что действия до создания модели - это моделирование выбора пользователя
+
+            var models = OrdersService.Read(new Orders() { MoneyId = money.Id });
+
             DateTime startTime = DateTime.Now;
-            WorkerService.Delete(model);
+            foreach (var model in models)
+            {
+                OrdersService.Delete(model);
+            }
             DateTime finishTime = DateTime.Now;
+
             return (int)(finishTime - startTime).TotalMilliseconds;
+
+
+            /*Money model = new Money() { Currency = "RUB", Amount = 1000, WorkerMoney = 1 };
+
+            DateTime startTime = DateTime.Now;
+            MoneyService.Delete(model);
+            DateTime finishTime = DateTime.Now;
+
+            return (int)(finishTime - startTime).TotalMilliseconds;*/
         }
 
         static int ScriptCustom0()
         {
-            var worker = WorkerService.Read(new Worker() { FullNameWorker = "Ivanov II", Position = "manager" }, 1, 0).First();
-            var customer = CustomerService.Read(new Customer() { FullNameCustomers = "Ivanov II", NumberOfMan = 1 }, 1, 0).First();
             DateTime startTime = DateTime.Now;
-            Orders model = OrdersService.Read(new Orders() { WorkerId = worker.Id, CustomersId = customer.Id }, 1, 0).First(); 
-            var models = OrdersService.Read(model);
-            foreach (var orders in models)
-            {
-                Console.WriteLine("{0} {1}", orders.DataBegin, orders.DataEnd);
-            }
+            var models = NumberService.ReadUsedNumber();
+            Console.WriteLine("{0} {1} ", models.Item1, models.Item2);
             DateTime finishTime = DateTime.Now;
             return (int)(finishTime - startTime).TotalMilliseconds;
         }

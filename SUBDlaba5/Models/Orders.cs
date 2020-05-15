@@ -39,7 +39,7 @@ namespace Lab5.Models
         [Column("numberid")]
         public int? NumberId { get; set; }
 
-        public Customer Customer { get; set; }
+        public Customer Customers { get; set; }
         public Money Money { get; set; }
         public Worker Worker { get; set; }
         public Transport Transport { get; set; }

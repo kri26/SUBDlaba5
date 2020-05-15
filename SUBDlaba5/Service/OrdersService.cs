@@ -68,7 +68,7 @@ namespace Lab5.Service
                     db.Orders
                     .Where(rec => rec.CustomersId == model.CustomersId && rec.NumberId == model.NumberId
                      && rec.MoneyId == model.MoneyId && rec.TransportId.HasValue == model.TransportId.HasValue && rec.WorkerId.HasValue == model.WorkerId.HasValue)
-                    .Include(rec => rec.Customer)
+                    .Include(rec => rec.Customers)
                     .Include(rec => rec.Money)
                     .Include(rec => rec.Transport)
                     .Include(rec => rec.Worker)
@@ -82,7 +82,7 @@ namespace Lab5.Service
                 answer =
                     db.Orders
                     .Where(rec => rec.Id == model.Id)
-                    .Include(rec => rec.Customer)
+                    .Include(rec => rec.Customers)
                     .Include(rec => rec.Money)
                     .Include(rec => rec.Transport)
                     .Include(rec => rec.Worker)
